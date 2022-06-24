@@ -4,9 +4,13 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ master ]
+    branches:
+      - develop
+      - main
   pull_request:
-    branches: [ develop ]
+    branches:
+      - develop
+      - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -30,7 +34,12 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '2.x'
-          channel: 'any'
+          channel: 'stable'
+          cache: true
+          cache-key: flutter # optional, change this to force refresh cache
+          cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
+          architecture: x64 # optional, x64 or arm64
+      - run: flutter --version
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
